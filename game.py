@@ -144,7 +144,8 @@ game_over = False
 def draw_menu(text):
     screen.fill((0, 0, 0))
     font = pygame.font.SysFont('arial', 40)
-    title1 = font.render(text, True, (255, 255, 255))
+    title1 = font.render(text + " (Aimar M. and Unai A.)",
+                         True, (255, 255, 255))
 
     start_button = font.render('Play', True, (255, 255, 255))
     end_button = font.render('Quit', True, (255, 255, 255))
