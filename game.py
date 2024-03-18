@@ -1,3 +1,5 @@
+# AIMAR MARDONES ETA UNAI ARCE
+
 # import the pygame module and the random command
 import pygame
 import random
@@ -5,8 +7,8 @@ import os
  
 # import pygame.locals for easier access to
 # key coordinates.
- 
-from pygame.locals import(
+
+from pygame.locals import (
     RLEACCEL,
     K_UP,
     K_DOWN,
@@ -15,19 +17,20 @@ from pygame.locals import(
     K_ESCAPE,
     KEYDOWN,
     QUIT,
-    )
- 
+)
+
 clock = pygame.time.Clock()
- 
+
 # Setup fr sound. Defaults are good.
 pygame.mixer.init()
- 
+
 # Initialize pygame
 pygame.init()
- 
+
 # Define a Player object by extending pygame.sprite.Sprite
 # The surface drawn on the screen is now an attribute of 'player'
- 
+
+
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()
@@ -43,7 +46,7 @@ class Player(pygame.sprite.Sprite):
         self.surf.set_colorkey((255, 255, 255), RLEACCEL)
         self.rect = self.surf.get_rect(center=(x, y))
         self.speed = 3
- 
+
     # Move the sprite based on user keypresses
     def update(self, pressed_keys):
         if pressed_keys[K_UP]:
@@ -56,7 +59,7 @@ class Player(pygame.sprite.Sprite):
             self.rect.move_ip(-self.speed, 0)
         if pressed_keys[K_RIGHT]:
             self.rect.move_ip(self.speed, 0)
- 
+
         # Keep player on the screen
         if self.rect.left < 0:
             self.rect.left = 0
@@ -66,9 +69,11 @@ class Player(pygame.sprite.Sprite):
             self.rect.top = 0
         if self.rect.bottom >= SCREEN_HEIGHT:
             self.rect.bottom = SCREEN_HEIGHT
- 
+
 # Define the enemy obect by extending pygame.sprite.Sprite
 # The surface you draw on the screen is now an attribute of 'enemy'
+
+
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super(Enemy, self).__init__()
@@ -83,15 +88,18 @@ class Enemy(pygame.sprite.Sprite):
         self.speed = random.randint(1, 4)
     # Move the sprite based on speed
     # Remove the sprite when it passes the left edge of the screen
+
     def update(self):
         self.rect.move_ip(-self.speed, 0)
         if self.rect.right < 0:
             self.kill()
             player.score += 1
+
+
 # define constants for the screen width and height
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
- 
+
 # create the screen object. The size is
 # determied by the constants SCREEN_WIDTH
 # and SCREEN_HEIGHT
@@ -102,7 +110,7 @@ background = pygame.image.load("space.png")
 # Load and play background music
 pygame.mixer.music.load("Apoxode.wav")
 pygame.mixer.music.play(loops=-1)
- 
+
 # Load all sound files
 # Sound sources: Jon Fincher
 move_up_sound = pygame.mixer.Sound("Rising_putter.wav")
@@ -112,8 +120,9 @@ collision_sound = pygame.mixer.Sound("Collision.wav")
 # Create a custom event for adding a new enemy
 ADDENEMY = pygame.USEREVENT + 1
 pygame.time.set_timer(ADDENEMY, 400)
- 
-#instantiate player - at the moment a rectangle
+
+# instantiate player - at the moment a rectangle
+
 
 def create_player_enemies():
     # Create groups to hold enemy sprites and all sprites
@@ -124,6 +133,7 @@ def create_player_enemies():
     all_sprites = pygame.sprite.Group()
     all_sprites.add(player)
     return enemies, all_sprites, player
+
 
 # variable to keep the main loop running
 running = True
@@ -160,6 +170,7 @@ def draw_menu(text, score):
     pygame.display.update()
     return start_button_rect, end_button_rect
 
+
 def draw_die():
     screen.fill((0, 0, 0))
     font = pygame.font.SysFont('arial', 40)
@@ -171,20 +182,26 @@ def draw_die():
     continue_button_rect = continue_button.get_rect(center=(400, 300))
     end_button_rect = end_button.get_rect(center=(400, 400))
 
-    screen.blit(title1, (400 - title1.get_width()/2, 150 - title1.get_height()/2))
-    screen.blit(continue_button, (400 - continue_button.get_width()/2, 250 + continue_button.get_height()/2))
-    screen.blit(end_button, (400 - end_button.get_width()/2, 350 + end_button.get_height()/2))
+    screen.blit(title1, (400 - title1.get_width() /
+                2, 150 - title1.get_height()/2))
+    screen.blit(continue_button, (400 - continue_button.get_width() /
+                2, 250 + continue_button.get_height()/2))
+    screen.blit(end_button, (400 - end_button.get_width() /
+                2, 350 + end_button.get_height()/2))
 
     pygame.display.update()
     return continue_button_rect, end_button_rect
+
 
 def draw_score_lifes():
     lifes = pygame.image.load("corazon.png")
 
     for life in range(player.lifes):
-        screen.blit(lifes, (25+50*life - lifes.get_width()/2, 575 - lifes.get_height()/2))
+        screen.blit(lifes, (25+50*life - lifes.get_width() /
+                    2, 575 - lifes.get_height()/2))
 
     pygame.display.update()
+
 
 # main loop
 while running:
@@ -199,32 +216,32 @@ while running:
             # did the user click the window close button?
             elif event.type == QUIT:
                 running = False
-    
+
             # Add a new enemy?
             elif event.type == ADDENEMY:
                 # Create the new enemy and add it to sprite groups
                 new_enemy = Enemy()
                 enemies.add(new_enemy)
                 all_sprites.add(new_enemy)
-    
+
         # Draw the background using the blit() function
-        screen.blit(background,(0,0))
+        screen.blit(background, (0, 0))
         # get all the keys currently pressed
         pressed_keys = pygame.key.get_pressed()
-    
+
         # update enemy position
         enemies.update()
-    
+
         # update the player sprite based on user keypresses
         player.update(pressed_keys)
-    
+
         # fill the screen with white
         # screen.fill((0,0,0))
-    
+
         # draw all sprites
         for entity in all_sprites:
             screen.blit(entity.surf, entity.rect)
-    
+
         # Check if any enemies have collided with player
         if pygame.sprite.spritecollideany(player, enemies):
             # If so, the remove the player and stop the loop
@@ -240,7 +257,7 @@ while running:
             move_up_sound.stop()
             move_down_sound.stop()
             collision_sound.play()
-    
+
         # draw the player on the screen
         screen.blit(player.surf, player.rect)
 
@@ -277,7 +294,7 @@ while running:
             continue_button_rect, end_button_rect = draw_die()
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if  start_button_rect.collidepoint(event.pos):
+                    if start_button_rect.collidepoint(event.pos):
                         player.restart(x, y)
                         enemies = pygame.sprite.Group()
                         all_sprites = pygame.sprite.Group()
@@ -290,4 +307,3 @@ while running:
 pygame.mixer.music.stop()
 pygame.mixer.quit()
 pygame.quit()
- 
