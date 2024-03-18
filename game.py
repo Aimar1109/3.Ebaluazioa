@@ -1,6 +1,7 @@
 # import the pygame module and the random command
 import pygame
 import random
+import os
  
 # import pygame.locals for easier access to
 # key coordinates.
@@ -95,7 +96,7 @@ SCREEN_HEIGHT = 600
 # determied by the constants SCREEN_WIDTH
 # and SCREEN_HEIGHT
 screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
- 
+
 # Load background image
 background = pygame.image.load("space.png")
 # Load and play background music
@@ -129,11 +130,23 @@ running = True
 game_state = False
 first = True
 game_over = False
+score = None
 
-def draw_menu(text):
+def draw_menu(text, score):
     screen.fill((0, 0, 0))
     font = pygame.font.SysFont('arial', 40)
-    title1 = font.render(text, True, (255, 255, 255))
+    
+    if score:
+        title1 = font.render(text, True, (255, 255, 255))
+        screen.blit(title1, (400 - title1.get_width()/2, 100 - title1.get_height()/2))
+
+        score = font.render(f'SCORE: {score}', True, (255, 255, 255))
+        screen.blit(score, (400 - score.get_width()/2, 150 - score.get_height()/2))
+        score = None
+
+    else:
+        title1 = font.render(text, True, (255, 255, 255))
+        screen.blit(title1, (400 - title1.get_width()/2, 150 - title1.get_height()/2))
 
     start_button = font.render('Play', True, (255, 255, 255))
     end_button = font.render('Quit', True, (255, 255, 255))
@@ -141,7 +154,6 @@ def draw_menu(text):
     start_button_rect = start_button.get_rect(center=(400, 300))
     end_button_rect = end_button.get_rect(center=(400, 400))
 
-    screen.blit(title1, (400 - title1.get_width()/2, 150 - title1.get_height()/2))
     screen.blit(start_button, (400 - start_button.get_width()/2, 250 + start_button.get_height()/2))
     screen.blit(end_button, (400 - end_button.get_width()/2, 350 + end_button.get_height()/2))
 
@@ -241,10 +253,10 @@ while running:
     else:
         if first:
             if game_over:
-               start_button_rect, end_button_rect = draw_menu('GAME OVER')
+               start_button_rect, end_button_rect = draw_menu('GAME OVER', score)
                game_over = False
             else:
-               start_button_rect, end_button_rect = draw_menu('MY GAME')
+               start_button_rect, end_button_rect = draw_menu('MY GAME', score)
 
             for event in pygame.event.get():
                 if event.type == KEYDOWN:
@@ -267,6 +279,9 @@ while running:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if  start_button_rect.collidepoint(event.pos):
                         player.restart(x, y)
+                        enemies = pygame.sprite.Group()
+                        all_sprites = pygame.sprite.Group()
+                        all_sprites.add(player)
                         game_state = True
                     elif end_button_rect.collidepoint(event.pos):
                         running = False
