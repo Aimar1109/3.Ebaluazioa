@@ -271,7 +271,6 @@ while running:
         if first:
             if game_over:
                start_button_rect, end_button_rect = draw_menu('GAME OVER', score)
-               game_over = False
             else:
                start_button_rect, end_button_rect = draw_menu('MY GAME', score)
 
@@ -288,6 +287,7 @@ while running:
                         enemies, all_sprites, player = create_player_enemies()
                         game_state = True
                         first = False
+                        game_over = False
                     elif end_button_rect.collidepoint(event.pos):
                         running = False
         else:
