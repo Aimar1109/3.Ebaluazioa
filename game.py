@@ -34,7 +34,7 @@ pygame.init()
 class Player(pygame.sprite.Sprite):
     def __init__(self):
         super(Player, self).__init__()
-        self.surf = pygame.image.load("spacecraft.png").convert()
+        self.surf = pygame.image.load("spacecraft.png").convert_alpha()
         self.surf.set_colorkey((255, 255, 255), RLEACCEL)
         self.rect = self.surf.get_rect()
         self.speed = 3
@@ -42,7 +42,7 @@ class Player(pygame.sprite.Sprite):
         self.score = 0
 
     def restart(self, x, y):
-        self.surf = pygame.image.load("spacecraft.png").convert()
+        self.surf = pygame.image.load("spacecraft.png").convert_alpha()
         self.surf.set_colorkey((255, 255, 255), RLEACCEL)
         self.rect = self.surf.get_rect(center=(x, y))
         self.speed = 3
@@ -77,7 +77,7 @@ class Player(pygame.sprite.Sprite):
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super(Enemy, self).__init__()
-        self.surf = pygame.image.load("missile.png").convert()
+        self.surf = pygame.image.load("missile.png").convert_alpha()
         self.surf.set_colorkey((255, 255, 255), RLEACCEL)
         self.rect = self.surf.get_rect(
             center=(
@@ -248,8 +248,8 @@ while running:
             x = player.rect.x
             y = player.rect.y
             player.kill()
-            game_state = False
             player.lifes -= 1
+            game_state = False
             if player.lifes == 0:
                 first = True
                 game_over = True
