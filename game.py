@@ -85,15 +85,15 @@ class Enemy(pygame.sprite.Sprite):
                 random.randint(0, SCREEN_HEIGHT),
             )
         )
-        self.speed = random.randint(1, 4)
+        self.speed = 3
     # Move the sprite based on speed
     # Remove the sprite when it passes the left edge of the screen
 
     def update(self):
         self.rect.move_ip(-self.speed, 0)
         if self.rect.right < 0:
-            self.kill()
             player.score += 1
+            self.kill()
 
 # Bullet class
 class Bullet(pygame.sprite.Sprite):
@@ -276,6 +276,15 @@ while running:
             move_up_sound.stop()
             move_down_sound.stop()
             collision_sound.play()
+
+        for bullet in bullets:
+            if pygame.sprite.spritecollideany(bullet, enemies):
+                for enemie in enemies:
+                    if pygame.sprite.spritecollideany(enemie, bullets):
+                        enemie.kill()
+                bullet.kill()
+       
+        
 
         # draw the player on the screen
         screen.blit(player.surf, player.rect)
