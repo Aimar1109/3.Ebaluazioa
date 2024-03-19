@@ -166,7 +166,7 @@ def draw_menu(text, score):
         screen.blit(title1, (400 - title1.get_width()/2, 100 - title1.get_height()/2))
 
         score = font.render(f'SCORE: {score}', True, (255, 255, 255))
-        screen.blit(score, (400 - score.get_width()/2, 150 - score.get_height()/2))
+        screen.blit(score, (400 - score.get_width()/2, 200 - score.get_height()/2))
         score = None
 
     else:
@@ -186,10 +186,15 @@ def draw_menu(text, score):
     return start_button_rect, end_button_rect
 
 
-def draw_die():
+def draw_die(score):
     screen.fill((0, 0, 0))
     font = pygame.font.SysFont('arial', 40)
-    title1 = font.render('My Game', True, (255, 255, 255))
+
+    title1 = font.render('MYGAME', True, (255, 255, 255))
+    screen.blit(title1, (400 - title1.get_width()/2, 100 - title1.get_height()/2))
+
+    score = font.render(f'SCORE: {score}', True, (255, 255, 255))
+    screen.blit(score, (400 - score.get_width()/2, 200 - score.get_height()/2))
 
     continue_button = font.render('Continue', True, (255, 255, 255))
     end_button = font.render('Quit', True, (255, 255, 255))
@@ -197,8 +202,6 @@ def draw_die():
     continue_button_rect = continue_button.get_rect(center=(400, 300))
     end_button_rect = end_button.get_rect(center=(400, 400))
 
-    screen.blit(title1, (400 - title1.get_width() /
-                2, 150 - title1.get_height()/2))
     screen.blit(continue_button, (400 - continue_button.get_width() /
                 2, 250 + continue_button.get_height()/2))
     screen.blit(end_button, (400 - end_button.get_width() /
@@ -283,6 +286,7 @@ while running:
                     if pygame.sprite.spritecollideany(enemie, bullets):
                         enemie.kill()
                 bullet.kill()
+                score += 1
        
         
 
@@ -316,10 +320,11 @@ while running:
                         game_state = True
                         first = False
                         game_over = False
+                        score = 0
                     elif end_button_rect.collidepoint(event.pos):
                         running = False
         else:
-            continue_button_rect, end_button_rect = draw_die()
+            continue_button_rect, end_button_rect = draw_die(score)
             for event in pygame.event.get():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if start_button_rect.collidepoint(event.pos):
