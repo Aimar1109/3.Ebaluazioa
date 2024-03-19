@@ -95,6 +95,20 @@ class Enemy(pygame.sprite.Sprite):
             self.kill()
             player.score += 1
 
+# Bullet class
+class Bullet(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+        self.surf = pygame.Surface((10, 10))
+        self.surf.fill((0, 0, 0))
+        self.rect = self.surf.get_rect(center = (60+x, 25+y))
+        self.speed = 10
+
+    def update(self):
+        self.rect.x += self.speed
+        if self.rect.bottom > SCREEN_WIDTH:
+            self.kill()
+
 
 # define constants for the screen width and height
 SCREEN_WIDTH = 800
@@ -131,8 +145,9 @@ def create_player_enemies():
     player = Player()
     enemies = pygame.sprite.Group()
     all_sprites = pygame.sprite.Group()
+    bullets = pygame.sprite.Group()
     all_sprites.add(player)
-    return enemies, all_sprites, player
+    return enemies, all_sprites, player, bullets
 
 
 # variable to keep the main loop running
@@ -213,6 +228,10 @@ while running:
                 # was it the Escape key? If so stop the loop
                 if event.key == K_ESCAPE:
                     running = False
+                if event.key == pygame.K_s:
+                    bullet = Bullet(player.rect.x, player.rect.y)
+                    all_sprites.add(bullet)
+                    bullets.add(bullet)
             # did the user click the window close button?
             elif event.type == QUIT:
                 running = False
@@ -223,6 +242,9 @@ while running:
                 new_enemy = Enemy()
                 enemies.add(new_enemy)
                 all_sprites.add(new_enemy)
+
+        x = player.rect.x
+        y = player.rect.y
 
         # Draw the background using the blit() function
         screen.blit(background, (0, 0))
@@ -235,8 +257,7 @@ while running:
         # update the player sprite based on user keypresses
         player.update(pressed_keys)
 
-        # fill the screen with white
-        # screen.fill((0,0,0))
+        bullets.update()
 
         # draw all sprites
         for entity in all_sprites:
@@ -245,8 +266,6 @@ while running:
         # Check if any enemies have collided with player
         if pygame.sprite.spritecollideany(player, enemies):
             # If so, the remove the player and stop the loop
-            x = player.rect.x
-            y = player.rect.y
             player.kill()
             player.lifes -= 1
             game_state = False
@@ -284,7 +303,7 @@ while running:
                     running = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if start_button_rect.collidepoint(event.pos):
-                        enemies, all_sprites, player = create_player_enemies()
+                        enemies, all_sprites, player, bullets = create_player_enemies()
                         game_state = True
                         first = False
                         game_over = False
