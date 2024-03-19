@@ -37,7 +37,7 @@ class Player(pygame.sprite.Sprite):
         self.surf = pygame.image.load("spacecraft.png").convert_alpha()
         self.surf.set_colorkey((255, 255, 255), RLEACCEL)
         self.rect = self.surf.get_rect()
-        self.speed = 3
+        self.speed = 4
         self.lifes = 3
         self.score = 0
 
@@ -45,7 +45,6 @@ class Player(pygame.sprite.Sprite):
         self.surf = pygame.image.load("spacecraft.png").convert_alpha()
         self.surf.set_colorkey((255, 255, 255), RLEACCEL)
         self.rect = self.surf.get_rect(center=(x, y))
-        self.speed = 3
 
     # Move the sprite based on user keypresses
     def update(self, pressed_keys):
@@ -75,7 +74,7 @@ class Player(pygame.sprite.Sprite):
 
 
 class Enemy(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, speed):
         super(Enemy, self).__init__()
         self.surf = pygame.image.load("missile.png").convert_alpha()
         self.surf.set_colorkey((255, 255, 255), RLEACCEL)
@@ -85,7 +84,7 @@ class Enemy(pygame.sprite.Sprite):
                 random.randint(0, SCREEN_HEIGHT),
             )
         )
-        self.speed = 3
+        self.speed = speed
     # Move the sprite based on speed
     # Remove the sprite when it passes the left edge of the screen
 
@@ -147,7 +146,9 @@ def create_player_enemies():
     all_sprites = pygame.sprite.Group()
     bullets = pygame.sprite.Group()
     all_sprites.add(player)
-    return enemies, all_sprites, player, bullets
+    speed = 3
+    up = []
+    return enemies, all_sprites, player, bullets, speed, []
 
 
 # variable to keep the main loop running
@@ -245,7 +246,7 @@ while running:
             # Add a new enemy?
             elif event.type == ADDENEMY:
                 # Create the new enemy and add it to sprite groups
-                new_enemy = Enemy()
+                new_enemy = Enemy(speed)
                 enemies.add(new_enemy)
                 all_sprites.add(new_enemy)
 
@@ -290,7 +291,10 @@ while running:
                         enemie.kill()
                 bullet.kill()
                 score += 1
-       
+
+        if score % 10 == 0 and score not in up and score > 0:
+            speed += 1
+            up.append(score)    
         
 
         # draw the player on the screen
@@ -319,7 +323,7 @@ while running:
                     running = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if start_button_rect.collidepoint(event.pos):
-                        enemies, all_sprites, player, bullets = create_player_enemies()
+                        enemies, all_sprites, player, bullets, speed, up = create_player_enemies()
                         game_state = True
                         first = False
                         game_over = False
