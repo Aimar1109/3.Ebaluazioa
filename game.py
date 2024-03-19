@@ -101,7 +101,7 @@ class Bullet(pygame.sprite.Sprite):
         super().__init__()
         self.surf = pygame.Surface((10, 10))
         self.surf.fill((0, 0, 0))
-        self.rect = self.surf.get_rect(center = (60+x, 25+y))
+        self.rect = self.surf.get_rect(center = (70+x, 25+y))
         self.speed = 10
 
     def update(self):
@@ -160,17 +160,19 @@ score = None
 def draw_menu(text, score):
     screen.fill((0, 0, 0))
     font = pygame.font.SysFont('arial', 40)
+    font1 = pygame.font.SysFont('arial', 60)
+
     
     if score:
-        title1 = font.render(text, True, (255, 255, 255))
-        screen.blit(title1, (400 - title1.get_width()/2, 100 - title1.get_height()/2))
+        title1 = font1.render(text, True, (255, 255, 255))
+        screen.blit(title1, (400 - title1.get_width()/2, 150 - title1.get_height()/2))
 
         score = font.render(f'SCORE: {score}', True, (255, 255, 255))
         screen.blit(score, (400 - score.get_width()/2, 200 - score.get_height()/2))
         score = None
 
     else:
-        title1 = font.render(text, True, (255, 255, 255))
+        title1 = font1.render(text, True, (255, 255, 255))
         screen.blit(title1, (400 - title1.get_width()/2, 150 - title1.get_height()/2))
 
     start_button = font.render('Play', True, (255, 255, 255))
@@ -189,9 +191,10 @@ def draw_menu(text, score):
 def draw_die(score):
     screen.fill((0, 0, 0))
     font = pygame.font.SysFont('arial', 40)
+    font1 = pygame.font.SysFont('arial', 60)
 
-    title1 = font.render('MYGAME', True, (255, 255, 255))
-    screen.blit(title1, (400 - title1.get_width()/2, 100 - title1.get_height()/2))
+    title1 = font1.render('MYGAME', True, (255, 255, 255))
+    screen.blit(title1, (400 - title1.get_width()/2, 150 - title1.get_height()/2))
 
     score = font.render(f'SCORE: {score}', True, (255, 255, 255))
     screen.blit(score, (400 - score.get_width()/2, 200 - score.get_height()/2))
