@@ -27,6 +27,15 @@ pygame.mixer.init()
 # Initialize pygame
 pygame.init()
 
+# define constants for the screen width and height
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+
+# create the screen object. The size is
+# determied by the constants SCREEN_WIDTH
+# and SCREEN_HEIGHT
+screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
+
 # Define a Player object by extending pygame.sprite.Sprite
 # The surface drawn on the screen is now an attribute of 'player'
 
@@ -107,16 +116,6 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.x += self.speed
         if self.rect.bottom > SCREEN_WIDTH:
             self.kill()
-
-
-# define constants for the screen width and height
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
-
-# create the screen object. The size is
-# determied by the constants SCREEN_WIDTH
-# and SCREEN_HEIGHT
-screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 
 # Load background image
 background = pygame.image.load("space.png")
