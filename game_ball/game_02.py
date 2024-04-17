@@ -1,3 +1,5 @@
+# AIMAR MARDONES AND UNAI ARCE
+
 import pygame
 
 pygame.init()
