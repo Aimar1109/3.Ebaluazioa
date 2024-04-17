@@ -26,13 +26,16 @@ score = 0
 first = True
 
 # MENU FUNCTION
-def draw_menu():
+def draw_menu(score):
     ventana.fill((0, 0, 0))
     font = pygame.font.SysFont('arial', 40)
     font1 = pygame.font.SysFont('arial', 60)
 
     title1 = font1.render('BALL GAME', True, (255, 255, 255))
     ventana.blit(title1, (325 - title1.get_width()/2, 150 - title1.get_height()/2))
+
+    score_d = font.render('SCORE: '+ str(score), True, (255, 255, 255))
+    ventana.blit(score_d, (325 - score_d.get_width()/2, 200 - score_d.get_height()/2))
 
     start_button = font.render('Play', True, (255, 255, 255))
     start_button_rect = start_button.get_rect(center=(325, 300))
@@ -104,7 +107,7 @@ while running:
 
     # MENU
     else:
-        continue_button_rect, end_button_rect = draw_menu()
+        continue_button_rect, end_button_rect = draw_menu(score)
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if continue_button_rect.collidepoint(event.pos):
