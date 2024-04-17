@@ -90,7 +90,6 @@ while running:
                 else:
                     speed[1] += 1
                 first = False
-        print(speed)
 
         ventana.fill((252, 243, 207))
 
