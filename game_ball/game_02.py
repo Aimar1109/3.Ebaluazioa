@@ -20,6 +20,7 @@ baterect.move_ip(240, 450)
 running = True
 game_state = False
 speed = [4, 4]
+score = 0
 
 def draw_menu():
     ventana.fill((0, 0, 0))
@@ -65,6 +66,9 @@ while running:
 
         if baterect.colliderect(ballrect):
             speed[1] = -speed[1]
+
+        if ballrect.bottom >= ventana.get_height():
+            game_state = False
 
         ventana.fill((252, 243, 207))
 
